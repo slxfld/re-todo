@@ -55,10 +55,10 @@ public class CategoryPanel extends AbstractPanel {
 		showLabel.setText("Show In Minimal Panel:");
 		add(showLabel);
 
-		JButton save_button = new JButton("Save");
-		save_button.setSize(70, 25);
-		save_button.setLocation(135, 85 + 23);
-		save_button.addActionListener(new ActionListener() {
+		JButton saveButton = new JButton("Save");
+		saveButton.setSize(70, 25);
+		saveButton.setLocation(135, 85 + 23);
+		saveButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Config.properties.put("category_show_in_minimal_" + categoryName,
@@ -69,7 +69,7 @@ public class CategoryPanel extends AbstractPanel {
 				MainFrameSingleton.getInstance().loadPanel(new MainPanel());
 			}
 		});
-		this.add(save_button);
+		this.add(saveButton);
 
 	}
 }

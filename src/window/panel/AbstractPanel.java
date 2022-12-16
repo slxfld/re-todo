@@ -39,8 +39,7 @@ public class AbstractPanel extends JPanel implements IAbstractPanel {
 		MainFrameSingleton.getInstance().setSize(this.getSize());
 
 		closeButton.setFocusable(false);
-		closeButton.setSize(40, 34);
-		closeButton.setLocation(getWidth() - 41, 1);
+		closeButton.setBounds(getWidth() - 41, 1, 40, 34);
 		closeButton.setLayout(null);
 
 		closeLabel.setBounds(16, 5, 20, 20);
