@@ -42,27 +42,23 @@ public class NewTaskPanel extends AbstractPanel {
 		super.setupUIComponents();
 
 		JLabel nameLabel = new JLabel((nameChangeable) ? "todo name" : presetName);
-		nameLabel.setSize(150, 25);
-		nameLabel.setLocation(25, 0 + 0);
+		nameLabel.setBounds(25, 0, 150, 25);
 		this.add(nameLabel);
 
 		JTextField taskNameField = new JTextField();
 		taskNameField.setEnabled(nameChangeable);
-		taskNameField.setSize(300, 25);
-		taskNameField.setLocation(25, 25 + 0);
+		taskNameField.setBounds(25, 25, 300, 25);
 		if (!presetName.isEmpty()) {
 			taskNameField.setText(presetName);
 		}
 		this.add(taskNameField);
 
 		JLabel daysLabel = new JLabel("days");
-		daysLabel.setSize(50, 25);
-		daysLabel.setLocation(25, 50 + 0);
+		daysLabel.setBounds(25, 50, 50, 25);
 		this.add(daysLabel);
 
 		JSpinner taskRepeatDays = new JSpinner();
-		taskRepeatDays.setSize(125, 25);
-		taskRepeatDays.setLocation(25, 75 + 0);
+		taskRepeatDays.setBounds(25, 75, 125, 25);
 		if (!presetDays.isEmpty()) {
 			taskRepeatDays.setValue(Integer.parseInt(presetDays));
 		}
@@ -92,21 +88,19 @@ public class NewTaskPanel extends AbstractPanel {
 		add(categoryField);
 
 		JButton saveButton = new JButton("Save");
-		saveButton.setSize(70, 25);
-		saveButton.setLocation(135, 85 + 23);
+		saveButton.setBounds(135, 108, 70, 25);
 		saveButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Config.properties.put("" + taskNameField.getText() + "_days",
-						"" + taskRepeatDays.getValue());
-				Config.properties.put("" + taskNameField.getText() + "_category",
+				Config.put("" + taskNameField.getText() + "_days", "" + taskRepeatDays.getValue());
+				Config.put("" + taskNameField.getText() + "_category",
 						"" + categoryField.getText());
-				if (Config.properties.get("" + taskNameField.getText() + "_last_date") == null) {
-					Config.properties.put("" + taskNameField.getText() + "_last_date",
+
+				if (Config.get("" + taskNameField.getText() + "_last_date") == null) {
+					Config.put("" + taskNameField.getText() + "_last_date",
 							LocalDate.now().toString());
 				}
-				Config.properties.put("" + taskNameField.getText() + "_repeating",
-						"" + repeating);
+				Config.put("" + taskNameField.getText() + "_repeating", "" + repeating);
 
 				Config.save();
 
@@ -116,8 +110,7 @@ public class NewTaskPanel extends AbstractPanel {
 		this.add(saveButton);
 
 		JButton cancelButton = new JButton("cancel");
-		cancelButton.setSize(70, 25);
-		cancelButton.setLocation(215, 85 + 23);
+		cancelButton.setBounds(215, 108, 70, 25);
 		cancelButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -127,24 +120,21 @@ public class NewTaskPanel extends AbstractPanel {
 		this.add(cancelButton);
 
 		JButton deleteButton = new JButton("delete");
-		deleteButton.setSize(70, 25);
-		deleteButton.setLocation(295, 85 + 23);
+		deleteButton.setBounds(295, 108, 70, 25);
 		deleteButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				Config.properties.remove(taskNameField.getText() + "_days");
-				Config.properties.remove(taskNameField.getText() + "_last_date");
+				Config.remove(taskNameField.getText() + "_days");
+				Config.remove(taskNameField.getText() + "_last_date");
 				try {
-					Config.properties.remove(taskNameField.getText() + "_repeating");
+					Config.remove(taskNameField.getText() + "_repeating");
 				} catch (Exception e2) {
 				}
-				;
 				try {
-					Config.properties.remove(taskNameField.getText() + "_category");
+					Config.remove(taskNameField.getText() + "_category");
 				} catch (Exception e2) {
 				}
-				;
 
 				Config.save();
 				MainFrameSingleton.getInstance().loadPanel(new MainPanel());

@@ -11,18 +11,22 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import config.Config;
-import lombok.AllArgsConstructor;
 import window.frame.MainFrame;
 import window.frame.MainFrameSingleton;
 import window.panel.CategoryPanel;
 import window.panel.MainPanel;
 
-@AllArgsConstructor
 public class TabButton extends JButton {
 
 	private static final long serialVersionUID = 1L;
 
 	String name;
+
+	public TabButton(String name) {
+		this.name = name;
+
+		setDefaults();
+	}
 
 	@Override
 	public void setBounds(int x, int y, int w, int h) {

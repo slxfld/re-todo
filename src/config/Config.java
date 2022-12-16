@@ -72,6 +72,14 @@ public class Config {
 		}
 	}
 
+	public static void put(String propertyName, String value) {
+		properties.put(propertyName, value);
+	}
+
+	public static void remove(String propertName) {
+		properties.remove(propertName);
+	}
+
 	public static boolean exists(String propertyName) {
 		return (properties.getProperty(propertyName) != null);
 	}

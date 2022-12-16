@@ -11,13 +11,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import config.Config;
-import lombok.AllArgsConstructor;
 import window.frame.MainFrame;
 import window.frame.MainFrameSingleton;
 import window.panel.MainPanel;
 import window.panel.MinimalPanel;
 
-@AllArgsConstructor
 public class TaskButton extends JButton {
 
 	private static final long serialVersionUID = 1L;
@@ -31,6 +29,15 @@ public class TaskButton extends JButton {
 	boolean repeats;
 
 	final JPanel dueColorPanel = new JPanel();
+
+	public TaskButton(WindowType wtype, String key, int days, boolean repeats) {
+		this.wtype = wtype;
+		this.key = key;
+		this.days = days;
+		this.repeats = repeats;
+
+		setDefaults();
+	}
 
 	@Override
 	public void resize(int w, int h) {

@@ -1,5 +1,7 @@
 package window.panel;
 
+import static window.ui.WindowType.MAIN;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
@@ -72,8 +74,7 @@ public class MainPanel extends AbstractPanel {
 				new ImageIcon(this.getClass().getResource(RESOURCES_ICONS_ADD_PNG)));
 
 		addButton.setFocusable(false);
-		addButton.setSize(35, 34);
-		addButton.setLocation(1, 1);
+		addButton.setBounds(1, 1, 35, 34);
 		addButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -86,8 +87,7 @@ public class MainPanel extends AbstractPanel {
 		JButton collapseButton = new JButton(
 				new ImageIcon(this.getClass().getResource(RESOURCES_ICONS_COLLAPSE_PNG)));
 		collapseButton.setFocusable(false);
-		collapseButton.setSize(35, 34);
-		collapseButton.setLocation(37, 1);
+		collapseButton.setBounds(37, 1, 35, 34);
 		collapseButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -99,7 +99,6 @@ public class MainPanel extends AbstractPanel {
 		loadCategories();
 		addTabButtons();
 		addTaskButtons();
-
 	}
 
 	private void loadCategories() {
@@ -116,7 +115,6 @@ public class MainPanel extends AbstractPanel {
 	private void addTabButtons() {
 		int index = 0;
 		int width = ((0x170 - 2) / categories.size());
-
 		for (String category : categories) {
 			addTabButton(category, 3 + (index * width), 37, width - 2, 25);
 			index++;
@@ -125,17 +123,15 @@ public class MainPanel extends AbstractPanel {
 
 	private void addTabButton(String name, int x, int y, int w, int h) {
 		TabButton tabButton = new TabButton(name);
-		tabButton.setDefaults();
 		tabButton.setBounds(x, y, w, h);
 		tabButton.addColorPanel();
-		this.add(tabButton);
+		add(tabButton);
 		tabButtons.add(tabButton);
 	}
 
 	public void addTaskButtons() {
-		for (Entry<Object, Object> entry : Config.properties.entrySet()) {
+		for (Entry<Object, Object> entry : Config.properties.entrySet())
 			addTaskButton((String) entry.getKey(), (String) entry.getValue(), 5, 65 + row_y);
-		}
 	}
 
 	private void addTaskButton(String property, String value, int x, int y) {
@@ -144,31 +140,32 @@ public class MainPanel extends AbstractPanel {
 				: "";
 
 		if (!key.isEmpty()) {
-
 			String category = "";
 			if (Config.exists(key + "_category"))
 				category = Config.properties.getProperty(key + "_category");
 
 			if (category.equals(MainFrame.currentTab)) {
-
-				boolean repeats;
-
-				if (Config.properties.getProperty(key + "_repeating") == null)
-					repeats = true;
-				else
-					repeats = Config.properties.getProperty(key + "_repeating").equals("true");
-
-				TaskButton task_button = new TaskButton(WindowType.MAIN, key,
-						getExpiredTime(property, key), repeats);
-				task_button.setDefaults();
+				boolean repeats = isTaskRepeating(key);
+				TaskButton task_button = new TaskButton(MAIN, key, getExpiredTime(property, key),
+						repeats);
 				task_button.setLocation(x, y);
-				this.add(task_button);
-				taskButtons.add(task_button);
+				add(task_button);
 
+				taskButtons.add(task_button);
 				row_y += 30;
 				MainFrameSingleton.getInstance().setSize(this.getWidth(), 65 + row_y);
 			}
 		}
+	}
+
+	private boolean isTaskRepeating(String key) {
+		boolean repeats;
+
+		if (Config.properties.getProperty(key + "_repeating") == null)
+			repeats = true;
+		else
+			repeats = Config.properties.getProperty(key + "_repeating").equals("true");
+		return repeats;
 	}
 
 	/**
