@@ -79,7 +79,7 @@ public class MainPanel extends AbstractPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				MainFrameSingleton.getInstance()
-						.loadPanel(new NewTaskPanel(true, "", "", "", false));
+						.loadPanel(new NewTaskPanel(true, "", MainFrame.currentTab, "", false));
 			}
 		});
 		this.add(addButton);

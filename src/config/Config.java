@@ -1,5 +1,6 @@
 package config;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -24,7 +25,15 @@ public class Config {
 
 	private static Timer refresh;
 
+	static boolean fileExists = false;
+
 	public static void init() {
+		fileExists = (new File(RETODO_CONF_FILE).exists());
+		if (!fileExists) {
+			properties.put("initialized", "true");
+			save();
+		}
+
 		try {
 			refresh = new Timer();
 			refresh.scheduleAtFixedRate(new TimerTask() {
@@ -52,7 +61,7 @@ public class Config {
 	public static void save() {
 		try {
 			FileOutputStream stream = new FileOutputStream(getConfigPath());
-			if (properties.size() == 0)
+			if (properties.size() == 0 && fileExists)
 				throw new Exception("no elements");
 			properties.store(stream, null);
 			stream.flush();

@@ -95,11 +95,12 @@ public class NewTaskPanel extends AbstractPanel {
 				Config.put("" + taskNameField.getText() + "_days", "" + taskRepeatDays.getValue());
 				Config.put("" + taskNameField.getText() + "_category",
 						"" + categoryField.getText());
+				Config.put("" + taskNameField.getText() + "_last_date", LocalDate.now().toString());
 
-				if (Config.get("" + taskNameField.getText() + "_last_date") == null) {
-					Config.put("" + taskNameField.getText() + "_last_date",
-							LocalDate.now().toString());
-				}
+				System.out.println("date:" + Config.get(taskNameField.getText() + "_last_date"));
+
+				System.out.println(LocalDate.now().toString());
+
 				Config.put("" + taskNameField.getText() + "_repeating", "" + repeating);
 
 				Config.save();
