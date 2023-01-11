@@ -1,13 +1,11 @@
 package window.ui;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import config.Config;
@@ -21,9 +19,13 @@ public class TabButton extends JButton {
 	private static final long serialVersionUID = 1L;
 
 	String name;
+	boolean undoneTasks = false;
 
-	public TabButton(String name) {
+	final JPanel dueColorPanel = new JPanel();
+
+	public TabButton(boolean undoneTasks, String name) {
 		this.name = name;
+		this.undoneTasks = undoneTasks;
 
 		setDefaults();
 	}
@@ -31,6 +33,20 @@ public class TabButton extends JButton {
 	@Override
 	public void setBounds(int x, int y, int w, int h) {
 		super.setBounds(x, y, w, h);
+		dueColorPanel.setSize(w - 1, h);
+	}
+
+	private void setDueColor(boolean undoneTasks) {
+
+		Color backgroundColor = new Color(255, 255, 255, 40);
+		if (undoneTasks == true) {
+			backgroundColor = new Color(200, 50, 50, 40);
+		} else {
+			backgroundColor = new Color(50, 50, 50, 40);
+		}
+		dueColorPanel.setSize(this.getWidth() - 1, this.getHeight());
+		dueColorPanel.setBackground(backgroundColor);
+		this.add(dueColorPanel);
 	}
 
 	public void setDefaults() {
@@ -38,6 +54,7 @@ public class TabButton extends JButton {
 		this.setLayout(null);
 		this.setSize(100, 25);
 		this.setEnabled(true);
+		this.setText(name);
 
 		this.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
@@ -61,7 +78,7 @@ public class TabButton extends JButton {
 				}
 			}
 		});
-
+		setDueColor(undoneTasks);
 	}
 
 	@Override
@@ -69,22 +86,4 @@ public class TabButton extends JButton {
 		super.paintComponent(g);
 	}
 
-	public void addColorPanel() {
-
-		JPanel bgPanel = new JPanel();
-
-		bgPanel.paintComponents(getGraphics());
-		if (name.equals(MainFrame.currentTab)) {
-			bgPanel.setSize(this.getWidth(), this.getHeight());
-			bgPanel.setBackground(new Color(50, 50, 50, 40));
-			this.add(bgPanel);
-		}
-
-		JLabel textLabel = new JLabel();
-		textLabel.setText(name);
-		textLabel.setLocation(10, 0);
-		textLabel.setSize(this.getWidth(), this.getHeight());
-		textLabel.setFont(new Font("", Font.BOLD, 16));
-		add(textLabel);
-	}
 }

@@ -26,6 +26,8 @@ public class MainFrame extends JFrame {
 
 	public static String currentTab = "";
 	public static WindowType currentWindowType = WindowType.MAIN;
+	public static int WIDTH = 0x171;
+	public static int HEIGHT = 0x200;
 
 	public MainFrame() {
 		setup_frame();
@@ -57,7 +59,7 @@ public class MainFrame extends JFrame {
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setType(Type.UTILITY);
 		this.setUndecorated(true);
-		this.setSize(0x171, 0x200);
+		this.setSize(WIDTH, HEIGHT);
 		this.setResizable(true);
 
 		cr = new ComponentResizer();

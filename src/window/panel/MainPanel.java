@@ -42,13 +42,16 @@ public class MainPanel extends AbstractPanel {
 		MainFrame.currentWindowType = WindowType.MAIN;
 
 		Config.load();
-		this.setSize(0x171, 0x200);
+		this.setSize(MainFrame.WIDTH, MainFrame.HEIGHT);
 		setupUIComponents();
 	}
 
 	@Override
 	public void resize() {
 		super.resize();
+
+		MainFrame.WIDTH = getWidth();
+		MainFrame.HEIGHT = getHeight();
 
 		for (TaskButton tb : taskButtons)
 			tb.resize(this.getWidth() - 9, tb.getHeight());
@@ -116,15 +119,32 @@ public class MainPanel extends AbstractPanel {
 		int index = 0;
 		int width = ((0x170 - 2) / categories.size());
 		for (String category : categories) {
-			addTabButton(category, 3 + (index * width), 37, width - 2, 25);
+
+			boolean containsUndone = false;
+
+			for (Entry<Object, Object> e : Config.properties.entrySet()) {
+				String eKey = (String) e.getKey();
+				String key = (eKey.contains("_days")) ? eKey.substring(0, eKey.length() - 5) : "";
+
+				if (Config.get(key + "_category").equals(category)) {
+
+					if (key.length() > 0) {
+						containsUndone = (getExpiredTime(key + "_days", key) <= 0);
+					}
+				}
+
+				if (containsUndone == true)
+					break;
+			}
+
+			addTabButton(containsUndone, category, 3 + (index * width), 37, width - 2, 25);
 			index++;
 		}
 	}
 
-	private void addTabButton(String name, int x, int y, int w, int h) {
-		TabButton tabButton = new TabButton(name);
+	private void addTabButton(boolean containsUndoneTask, String name, int x, int y, int w, int h) {
+		TabButton tabButton = new TabButton(containsUndoneTask, name);
 		tabButton.setBounds(x, y, w, h);
-		tabButton.addColorPanel();
 		add(tabButton);
 		tabButtons.add(tabButton);
 	}
@@ -171,15 +191,15 @@ public class MainPanel extends AbstractPanel {
 	/**
 	 * returns the days until the task expires.
 	 * 
-	 * @param key
-	 * @param name
+	 * @param days_key
+	 * @param keyname
 	 * @return days until expiration. (if the TODO is more than 5 years in the
 	 *         future returns - 999999999)
 	 */
-	private int getExpiredTime(String key, String name) {
-		String date_string = (String) Config.properties.get(name + "_last_date");
+	private int getExpiredTime(String days_key, String keyname) {
+		String date_string = (String) Config.properties.get(keyname + "_last_date");
 		LocalDate date_after_days = LocalDate.parse(date_string)
-				.plusDays(Integer.parseInt((String) Config.properties.get(key)));
+				.plusDays(Integer.parseInt((String) Config.properties.get(days_key)));
 
 		if (date_after_days.getYear() == LocalDate.now().getYear()) {
 			return date_after_days.getDayOfYear() - LocalDate.now().getDayOfYear();
